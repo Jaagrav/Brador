@@ -5,7 +5,7 @@ import { styles } from '../styles';
 
 import BradorBlock from "./BradorBlock";
 
-function Bradors({bradors}) {
+function Bradors({ bradors, uid }) {
     return (
         <div style={styles.bradorsList}>
             <Droppable droppableId={"bradorsList"}>
@@ -16,7 +16,7 @@ function Bradors({bradors}) {
                             ref={provided.innerRef}
                         >
                             {bradors.map((brador, index) => (
-                                <BradorBlock brador={brador} index={index} key={brador.id}/>
+                                <BradorBlock brador={brador} index={index} key={brador.id} uid={uid} />
                             ))}
                             {provided.placeholder}
                         </div>

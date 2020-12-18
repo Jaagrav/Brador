@@ -1,30 +1,30 @@
 import React from 'react';
-import {Draggable} from 'react-beautiful-dnd';
+import { Draggable } from 'react-beautiful-dnd';
 
 import { Link } from 'react-router-dom';
 import { styles } from '../styles';
 
 import { DragIndicatorRounded } from "@material-ui/icons";
 
-function BradorBlock({brador, index}) {
+function BradorBlock({ brador, index, uid }) {
     return (
         <Draggable draggableId={brador.id} index={index}>
             {provided => (
-                <div  
+                <div
                     {...provided.draggableProps}
                     // {...provided.draggableProps.style}
                     ref={provided.innerRef}
                     style={{
                         ...provided.draggableProps.style,
                         ...styles.brador
-                    }} 
+                    }}
                 >
-                    <div 
+                    <div
                         {...provided.dragHandleProps}
                         style={styles.bradorDragHandleHolder}
                     >
-                        <DragIndicatorRounded 
-                            style={styles.bradorDragHandle} 
+                        <DragIndicatorRounded
+                            style={styles.bradorDragHandle}
                         />
                     </div>
                     <span style={styles.bradorTitle}><Link to={`/b/${brador.id}`}>{brador.title}</Link></span>

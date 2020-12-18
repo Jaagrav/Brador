@@ -1,62 +1,26 @@
 import React from 'react';
 import { styles } from './styles';
 
-import { IconButton } from "@material-ui/core";
+import { IconButton, Avatar } from "@material-ui/core";
 import { AddRounded as AddRoundedIcon } from '@material-ui/icons';
 
 import { DragDropContext } from "react-beautiful-dnd";
 
 import Bradors from "./components/Bradors";
 
+import { firebase, auth, database } from "../../components/firebase";
+import { currentDate } from "../../components/currentTime";
+
 function Home() {
-    const [userInfo, setUserInfo] = React.useState({
-        stageName: 'Jaagrav Seal',
-        photoURL: "https://avatars3.githubusercontent.com/u/52719271?s=460&u=6013170e3ddd824f72cc8ad4092cdf3bb03da4f9&v=4",
-        bradors: [{
-            id: "Mjhfsdhfuuiewi324iufeajwew2-",
-            title: "Schedule",
-            lastUpdated: "6 Dec, 2020",
-            created: "2 Dec, 2020"
-        }, {
-            id: "Mjhfsdajkgjrwi324iufeajwew9-",
-            title: "Todos",
-            lastUpdated: "9 Dec, 2020",
-            created: "5 Oct, 2020"
-        }, {
-            id: "Mjuaisfyugfuy6edahjdsjasdjsd-",
-            title: "Environment",
-            lastUpdated: "9 Dec, 2020",
-            created: "5 Oct, 2020"
-        }, {
-            id: "hsidufhew87riujsjdbjasdbahsd",
-            title: "School",
-            lastUpdated: "9 Dec, 2020",
-            created: "5 Oct, 2020"
-        }, {
-            id: "mkdslmasfhu7yuejrmnwdmnsjdfhsdv",
-            title: "TimeTable",
-            lastUpdated: "9 Dec, 2020",
-            created: "5 Oct, 2020"
-        }, {
-            id: "MKLdsjiuhisfuhsdf8awydiasuhdjyx-",
-            title: "Tempos",
-            lastUpdated: "9 Dec, 2020",
-            created: "5 Oct, 2020"
-        }, {
-            id: "LKMjdfsdbufy7uida7sdgaysdbhasdf-",
-            title: "Ideas",
-            lastUpdated: "9 Dec, 2020",
-            created: "5 Oct, 2020"
-        }, {
-            id: "mlkKShjdvbjkduihsfiusuhjvdcaawui-",
-            title: "Dos",
-            lastUpdated: "9 Dec, 2020",
-            created: "5 Oct, 2020"
-        }]
+    const [userAuthData, setUserAuthData] = React.useState({
+        uid: "",
+        displayName: "",
+        photoURL: "",
     });
-    const { stageName, photoURL, bradors } = userInfo;
+    const [bradors, setBradors] = React.useState([]);
+
     const onDragStart = (result, e) => {
-        console.log(result, e)
+        // Do Nothing for now
     }
     const onDragEnd = result => {
         //Update Drag and Drop Result
@@ -76,12 +40,59 @@ function Home() {
             }
         }
 
-        setUserInfo({ stageName: stageName, photoURL: photoURL, bradors: tempArr });
+        console.log(tempArr)
+        setBradors(tempArr);
+        if (userAuthData.uid && tempArr)
+            database
+                .child(userAuthData.uid)
+                .child("my_bradors")
+                .set(tempArr);
+    }
+    const logInUser = () => {
+        var provider = new firebase.auth.GoogleAuthProvider();
+        if (!auth.currentUser)
+            auth.signInWithPopup(provider);
+        else
+            auth.signOut();
+    }
+    const addBrador = () => {
+        if (auth.currentUser) {
+            setBradors([...bradors, {
+                id: Math.random().toString().substring(2),
+                title: "Untitled",
+                lastUpdated: currentDate,
+                created: currentDate
+            }])
+        }
     }
 
     React.useEffect(() => {
-        console.log("userInfo just updated...")
-    }, [userInfo])
+        auth.onAuthStateChanged(firebaseUser => {
+            if (firebaseUser) {
+                database
+                    .child(firebaseUser.uid)
+                    .child("my_bradors")
+                    .once("value")
+                    .then(snap => {
+                        setBradors(snap.val());
+                    })
+                setUserAuthData({ uid: firebaseUser.uid, stageName: firebaseUser.displayName, photoURL: firebaseUser.photoURL });
+            } else {
+                setUserAuthData({ uid: "", stageName: "", photoURL: "" });
+                setBradors([]);
+            }
+        })
+    }, [])
+
+    React.useEffect(() => {
+        console.log(bradors)
+
+        if (userAuthData.uid && bradors)
+            database
+                .child(userAuthData.uid)
+                .child("my_bradors")
+                .set(bradors);
+    }, [bradors]);
 
     return (
         <div style={styles.homePage}>
@@ -89,16 +100,16 @@ function Home() {
             <div style={styles.bradorsContainer}>
                 <div style={styles.bradorsHeader}>
                     <span style={styles.bradorHeaderSpan}>Your Brädors</span>
-                    <IconButton>
+                    <IconButton onClick={addBrador}>
                         <AddRoundedIcon />
                     </IconButton>
-                    <img src={photoURL} alt={stageName} style={styles.photoURL} />
+                    <Avatar alt={userAuthData.stageName} src={userAuthData.photoURL} style={styles.photoURL} onClick={logInUser} />
                 </div>
                 <DragDropContext
                     onDragStart={onDragStart}
                     onDragEnd={onDragEnd}
                 >
-                    <Bradors bradors={bradors} />
+                    <Bradors bradors={bradors} uid={userAuthData.id} />
                 </DragDropContext>
             </div>
         </div>
