@@ -57,11 +57,13 @@ function Home() {
     }
     const addBrador = () => {
         if (auth.currentUser) {
-            setBradors([...bradors, {
-                id: Math.random().toString().substring(2),
+            const newID = Math.random().toString().substring(2);
+            setBradors(prevBradors => [...prevBradors, {
+                id: newID,
                 title: "Untitled",
                 lastUpdated: currentDate,
-                created: currentDate
+                created: currentDate,
+                brador: "This is a brador page"
             }])
         }
     }
@@ -74,7 +76,10 @@ function Home() {
                     .child("my_bradors")
                     .once("value")
                     .then(snap => {
-                        setBradors(snap.val());
+                        if (snap.val())
+                            setBradors(snap.val());
+                        else
+                            setBradors([]);
                     })
                 setUserAuthData({ uid: firebaseUser.uid, stageName: firebaseUser.displayName, photoURL: firebaseUser.photoURL });
             } else {

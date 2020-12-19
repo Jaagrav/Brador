@@ -13,7 +13,7 @@ const styles = {
     bradorsContainer: {
         width: "95%",
         maxWidth: "40pc",
-        background: "rgba(71, 120, 155, 0.8)",
+        background: "#274860cc",
         // backdropFilter: "blur(15px)",
         borderRadius: "8px",
         margin: "0 auto",

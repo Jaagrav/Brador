@@ -27,7 +27,7 @@ function BradorBlock({ brador, index, uid }) {
                             style={styles.bradorDragHandle}
                         />
                     </div>
-                    <span style={styles.bradorTitle}><Link to={`/b/${brador.id}`}>{brador.title}</Link></span>
+                    <span style={styles.bradorTitle}><Link to={`/b/${index}`}>{brador.title}</Link></span>
                     <div style={styles.bradorLastUpdated}>
                         <span>{brador.lastUpdated}</span>
                         <span style={styles.bradorSmallSpan}>Last Updated</span>
