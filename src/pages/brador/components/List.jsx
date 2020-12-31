@@ -25,7 +25,7 @@ function List({ bradorData, listID, index, setBradorData }) {
     }, [listTitle])
 
     const addNail = () => {
-        if (newNailTitle) {
+        if (newNailTitle.trim()) {
             const newNailID = `nail-${Object.keys(bradorData.nails).length + 1}`;
             let nails = bradorData.nails;
             const emptyNail = {

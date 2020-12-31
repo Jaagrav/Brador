@@ -70,7 +70,7 @@ function Brador(props) {
         }
     }
     const addList = () => {
-        if (newListTitle) {
+        if (newListTitle.trim()) {
             const newListID = `list-${Object.keys(bradorData.lists).length + 1}`;
             let lists = bradorData.lists;
             const emptyList = {
