@@ -2,6 +2,11 @@ const styles = {
     homePage: {
         height: "100vh",
         width: "100vw",
+    },    
+    backdrop: {
+        zIndex: 100,
+        color: '#fff',
+        backdropFilter: "blur(15px)",
     },
     brandingName: {
         fontSize: 40,
@@ -39,10 +44,10 @@ const styles = {
     brador: {
         display: "grid",
         gridGap: "10px",
-        gridTemplateColumns: "auto 1fr 1fr 1fr",
+        gridTemplateColumns: (window.innerWidth > 600)?"auto 1fr 1fr 1fr":"auto 1fr",
         background: "rgba(39, 42, 62, 0.61)",
         borderRadius: "8px",
-        padding: "10px",
+        padding: (window.innerWidth > 600)?"10px":"20px 10px",
         marginTop: 10,
     },
     bradorDragHandleHolder: {
@@ -60,15 +65,15 @@ const styles = {
     },
     bradorLastUpdated: {
         padding: "2px 20px",
-        display: "grid",
         gridTemplateRows: "auto auto",
         textAlign: "center",
+        display: (window.innerWidth > 600)?"grid":"none",
     },
     bradorCreated: {
         padding: "2px 20px",
-        display: "grid",
         gridTemplateRows: "auto auto",
         textAlign: "center",
+        display: (window.innerWidth > 600)?"grid":"none",
     },
     bradorSmallSpan: {
         fontSize: 12

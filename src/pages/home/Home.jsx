@@ -1,7 +1,7 @@
 import React from 'react';
 import { styles } from './styles';
 
-import { IconButton, Avatar, Menu, MenuItem, Button } from "@material-ui/core";
+import { IconButton, Avatar, Menu, MenuItem, Button, Backdrop, CircularProgress } from "@material-ui/core";
 import { AddRounded as AddRoundedIcon } from '@material-ui/icons';
 
 import { DragDropContext } from "react-beautiful-dnd";
@@ -19,6 +19,8 @@ function Home() {
     });
     const [bradors, setBradors] = React.useState([]);
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [bradorsLoaded, setBradorsLoaded] = React.useState(true);
+
     const emptyBrador = {
         nails: {
             'nail-1': { id: 'nail-1', content: 'Get a haircut' },
@@ -126,11 +128,13 @@ function Home() {
                             setBradors(snap.val());
                         else
                             setBradors([]);
+                        setBradorsLoaded(false);
                     })
                 setUserAuthData({ uid: firebaseUser.uid, stageName: firebaseUser.displayName, photoURL: firebaseUser.photoURL });
             } else {
                 setUserAuthData({ uid: "", stageName: "", photoURL: "" });
                 setBradors([]);
+                setBradorsLoaded(false);
             }
         })
     }, [])
@@ -157,6 +161,9 @@ function Home() {
                 <MenuItem onClick={showSourceCode}>Source Code</MenuItem>
                 <MenuItem onClick={logOutUser}>Logout</MenuItem>
             </Menu>
+            <Backdrop style={styles.backdrop} open={bradorsLoaded}>
+                <CircularProgress color="inherit" />
+            </Backdrop>
             <div style={styles.homePage}>
                 <div style={styles.brandingName}>Brädor</div>
                 <div style={styles.bradorsContainer}>
