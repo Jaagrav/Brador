@@ -12,6 +12,8 @@ import { firebase, auth, database } from "../../components/firebase";
 import { currentDate } from "../../components/currentTime";
 
 function Home() {
+    document.title = "Home - Brador";
+
     const [userAuthData, setUserAuthData] = React.useState({
         uid: "",
         displayName: "",

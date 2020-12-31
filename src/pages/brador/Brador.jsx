@@ -14,6 +14,8 @@ import List from "./components/List";
 import { currentDate } from "../../components/currentTime";
 
 function Brador(props) {
+    document.title = "My Board - Brador";
+
     const [newListTitle, setNewListTitle] = React.useState("");
     const [bradorTitle, setBradorTitle] = React.useState("");
     const [isLoading, setIsLoading] = React.useState(true);
@@ -102,6 +104,8 @@ function Brador(props) {
                         const bradorDataTemp = snap.val().brador;
                         setBradorData(bradorDataTemp);
                         setIsLoading(false);
+
+                        document.title = snap.val().title + " - Brador";
                     })
                 setUserAuthData({ uid: firebaseUser.uid, stageName: firebaseUser.displayName, photoURL: firebaseUser.photoURL });
             } else {
