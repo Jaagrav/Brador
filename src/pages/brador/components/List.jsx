@@ -4,7 +4,7 @@ import { Draggable } from 'react-beautiful-dnd';
 
 import { styles } from '../styles';
 
-import { IconButton, Menu, MenuItem } from '@material-ui/core';
+import { IconButton, Menu, MenuItem, TextareaAutosize } from '@material-ui/core';
 import { MoreVert, AddRounded, EditRounded, DeleteForeverRounded } from '@material-ui/icons';
 
 import Nails from "./Nails.jsx";
@@ -95,7 +95,7 @@ function List({ bradorData, listID, index, setBradorData }) {
                                 {...provided.dragHandleProps}
                                 style={styles.listHead}
                             >
-                                <input ref={listTitleRef} style={styles.listTitle} value={listTitle} onBlur={() => { setTitleEditable(false) }} onChange={(e) => { setListTitle(e.target.value) }} readOnly={!titleEditable} />
+                                <TextareaAutosize ref={listTitleRef} style={styles.listTitle} value={listTitle} onBlur={() => { setTitleEditable(false) }} onChange={(e) => { setListTitle(e.target.value) }} readOnly={!titleEditable} />
                                 <IconButton onClick={handleClick}>
                                     <MoreVert />
                                 </IconButton>
@@ -104,7 +104,7 @@ function List({ bradorData, listID, index, setBradorData }) {
                                 <Nails nailData={bradorData.nails} nailIDs={bradorData.lists[listID].nailIDs} listID={listID} bradorData={bradorData} setBradorData={setBradorData} />
                             </div>
                             <div style={styles.createNail}>
-                                <input type="text" style={styles.newNailTitle} placeholder="New brädor task" spellCheck={false} value={newNailTitle} onChange={(e) => { setNewNailTitle(e.target.value) }} />
+                                <TextareaAutosize type="text" style={styles.newNailTitle} placeholder="New brädor task" spellCheck={false} value={newNailTitle} onChange={(e) => { setNewNailTitle(e.target.value) }} />
                                 <IconButton onClick={addNail}>
                                     <AddRounded />
                                 </IconButton>

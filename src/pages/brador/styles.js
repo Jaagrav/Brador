@@ -52,6 +52,7 @@ const styles = {
     listHead: {
         display: "grid",
         gridTemplateColumns: "1fr auto",
+        padding: "10px 0"
     },
     createNail: {
         display: "grid",
@@ -63,6 +64,7 @@ const styles = {
         background: "transparent",
         outline: "none",
         border: "none",
+        resize: "none",
     },
     listTitle: {
         margin: "auto 0",
@@ -72,6 +74,8 @@ const styles = {
         outline: "none",
         border: "none",
         fontSize: "18px",
+        resize: "none",
+        pointerEvents: "none"
     },
     nailTitle: {
         margin: "auto 0",
@@ -87,7 +91,8 @@ const styles = {
         background: "rgba(39, 42, 62, 0.61)",
         display: "grid",
         gridTemplateColumns: "auto 1fr auto",
-        marginBottom: "12px"
+        marginBottom: "12px",
+        padding: "10px 0"
     },
     nailDragHandle: {
         margin: "auto"

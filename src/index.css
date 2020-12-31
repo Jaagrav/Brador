@@ -30,7 +30,10 @@ code {
 }
 
 input::placeholder { /* WebKit browsers */
-  color:    #fff;
+  color:    #fff !important;
+}
+textarea::placeholder { /* WebKit browsers */
+  color:    #fff !important;
 }
 
 input:read-only {
