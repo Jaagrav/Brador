@@ -107,6 +107,10 @@ const styles = {
     dragIcon: {
         verticalAlign: "middle",
         margin: "0 2px 0 4px"
+    },
+    options: {
+        height: "fit-content",
+        margin: "auto"
     }
 }
 

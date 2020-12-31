@@ -74,7 +74,7 @@ function Nail({ nailData, nailID, index, listID, bradorData, setBradorData }) {
                                 <DragIndicatorRounded style={styles.dragIcon} />
                             </span>
                             <TextareaAutosize ref={contentRef} title={nailContent} style={{ ...styles.nailContent, ...styles.nailTitle }} value={nailContent} onChange={(e) => { setNailContent(e.target.value) }} readOnly={!titleEditable} onBlur={(e) => { setTitleEditable(false) }} />
-                            <span>
+                            <span style={styles.options}>
                                 <IconButton onClick={(event) => { setNailMenu(event.currentTarget) }}>
                                     <MoreVert />
                                 </IconButton>
