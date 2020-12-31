@@ -105,8 +105,8 @@ function List({ bradorData, listID, index, setBradorData }) {
                             </div>
                             <div style={styles.createNail}>
                                 <TextareaAutosize type="text" style={styles.newNailTitle} placeholder="New brädor task" spellCheck={false} value={newNailTitle} onChange={(e) => { setNewNailTitle(e.target.value) }} />
-                                <span style={styles.options}>
-                                    <IconButton style={styles.options} onClick={addNail}>
+                                <span>
+                                    <IconButton onClick={addNail}>
                                         <AddRounded />
                                     </IconButton>
                                 </span>
