@@ -6,12 +6,13 @@ const styles = {
         gridTemplateRows: "auto 1fr"
     },
     header: {
+        width: "100%",
         padding: "0 14px",
         display: "grid",
-        gridTemplateColumns: "repeat(3, 1fr)"
+        gridTemplateColumns: "auto auto auto"
     },
     brandingName: {
-        fontSize: 30,
+        fontSize: 20,
         fontFamily: "Cinzel, sans-serif",
         color: "white",
         padding: "10px 0"
@@ -22,7 +23,7 @@ const styles = {
         outline: "none",
         border: "none",
         fontWeight: "600",
-        fontSize: 18
+        fontSize: 14
     },
     photoURL: {
         height: "30px",
@@ -34,10 +35,17 @@ const styles = {
         padding: "0 14px 14px 14px",
         overflow: "auto"
     },
+    backdrop: {
+        zIndex: 100,
+        color: '#fff',
+        backdropFilter: "blur(15px)",
+    },
     list: {
         background: "rgba(39, 72, 96, 0.8)",
         height: "fit-content",
         width: "18pc",
+        minWidth: "18pc",
+        maxWidth: "18pc",
         borderRadius: "6px",
         marginRight: "14px"
     },
@@ -45,12 +53,35 @@ const styles = {
         display: "grid",
         gridTemplateColumns: "1fr auto",
     },
+    createNail: {
+        display: "grid",
+        gridTemplateColumns: "1fr auto",
+        marginTop: "-10px",
+    },
+    newNailTitle: {
+        margin: 12,
+        background: "transparent",
+        outline: "none",
+        border: "none",
+    },
     listTitle: {
         margin: "auto 0",
+        width: "100%",
         padding: "0 14px",
-        whiteSpace: "nowrap",
-        overflow: "hidden",
-        textOverflow: "ellipsis"
+        background: "transparent",
+        outline: "none",
+        border: "none",
+        fontSize: "18px",
+    },
+    nailTitle: {
+        margin: "auto 0",
+        width: "100%",
+        background: "transparent",
+        outline: "none",
+        border: "none",
+    },
+    nailsList: {
+        padding: "1px 0"
     },
     nail: {
         background: "rgba(39, 42, 62, 0.61)",
@@ -64,9 +95,9 @@ const styles = {
     nailContent: {
         fontSize: "14px",
         margin: "auto 0",
-        whiteSpace: "nowrap",
-        overflow: "hidden",
-        textOverflow: "ellipsis"
+        resize: "none",
+        cursor: "context-menu",
+        lineHeight: "18px"
     },
     dragIcon: {
         verticalAlign: "middle",

@@ -1,9 +1,11 @@
 import React from 'react'
 
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { Droppable } from "react-beautiful-dnd";
+
+import { styles } from "../styles";
 
 import Nail from "./Nail";
-function Nails({ nailData, nailIDs, listID }) {
+function Nails({ nailData, nailIDs, listID, bradorData, setBradorData }) {
     return (
         <Droppable droppableId={listID} type="nail">
             {
@@ -11,11 +13,12 @@ function Nails({ nailData, nailIDs, listID }) {
                     <div
                         {...provided.droppableProps}
                         ref={provided.innerRef}
+                        style={styles.nailsList}
                     >
                         {
-                            nailIDs.map((nailID, index) => (
-                                <Nail nailData={nailData[nailID]} index={index} key={nailID} />
-                            ))
+                            (nailIDs) ? (nailIDs.map((nailID, index) => (
+                                <Nail key={nailID} nailData={nailData[nailID]} nailID={nailID} listID={listID} index={index} bradorData={bradorData} setBradorData={setBradorData} />
+                            ))) : ("")
                         }
                         {provided.placeholder}
                     </div>

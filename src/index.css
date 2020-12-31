@@ -28,3 +28,31 @@ code {
   text-decoration: none;
   /* position: static !important; */
 }
+
+input::placeholder { /* WebKit browsers */
+  color:    #fff;
+}
+
+input:read-only {
+  pointer-events: none;
+  /* white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; */
+}
+
+.MuiPaper-root.MuiMenu-paper.MuiPopover-paper.MuiPaper-elevation8.MuiPaper-rounded {
+  background: rgb(39, 72, 96);
+}
+
+::-webkit-scrollbar {
+  appearance: none;
+  height: 14px;
+  width: 14px;
+  background: rgba(39, 72, 96, 0.6);
+}
+
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: rgb(39, 72, 96);
+}

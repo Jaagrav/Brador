@@ -34,6 +34,7 @@ const styles = {
         width: "40px",
         borderRadius: "8px",
         margin: "auto",
+        cursor: "pointer",
     },
     brador: {
         display: "grid",

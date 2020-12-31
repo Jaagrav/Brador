@@ -4,54 +4,93 @@ import { styles } from './styles';
 
 import { auth, database } from '../../components/firebase';
 
-import { Avatar } from "@material-ui/core";
+import { Avatar, IconButton, Backdrop, CircularProgress } from "@material-ui/core";
+import { AddRounded } from '@material-ui/icons';
 
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
 import List from "./components/List";
 
+import { currentDate } from "../../components/currentTime";
+
 function Brador(props) {
+    const [newListTitle, setNewListTitle] = React.useState("");
     const [bradorTitle, setBradorTitle] = React.useState("");
+    const [isLoading, setIsLoading] = React.useState(true);
     const [userAuthData, setUserAuthData] = React.useState({
         uid: "",
         displayName: "",
         photoURL: "",
     });
     const [bradorData, setBradorData] = React.useState({
-        nails: {
-            'nail-1': { id: 'nail-1', content: 'Get a haircut' },
-            'nail-2': { id: 'nail-2', content: 'Drink Coffee' },
-            'nail-3': { id: 'nail-3', content: 'Finish work on Brador' },
-            'nail-4': { id: 'nail-4', content: 'Create gig on Fiverr' },
-            'nail-5': { id: 'nail-5', content: 'Attend Rappa Maam\'s tution' },
-            'nail-6': { id: 'nail-6', content: 'Physics Tution@6' }
-        },
-        lists: {
-            'list-1': {
-                id: 'list-1',
-                title: 'Important ToDo',
-                nailIDs: ['nail-1', 'nail-2', 'nail-3', 'nail-4']
-            },
-            'list-2': {
-                id: 'list-2',
-                title: 'Tutions to attend',
-                nailIDs: ['nail-5', 'nail-6']
-            }
-        },
-        listorder: ['list-1', 'list-2']
+        nails: {},
+        lists: {},
+        listorder: []
     });
 
-    const onDragStart = () => {
-        console.log("Drag started...")
+    const onDragStart = (e) => {
+        // console.log("Drag started...")
     }
-    const onDragEnd = () => {
-        console.log("Drag ended...")
-    }
+    const onDragEnd = (e) => {
+        try {
+            if (e.type === "list") {
+                let listsArr = bradorData.listorder;
+                let sourceIndex = e.source.index;
+                let targetIndex = e.destination.index;
 
+                let temp = listsArr[sourceIndex];
+                listsArr.splice(sourceIndex, 1);
+                listsArr.splice(targetIndex, 0, temp);
+
+                setBradorData({ ...bradorData, listorder: listsArr })
+            }
+            else if (e.type === "nail") {
+                let listsContent = bradorData.lists;
+
+                let sourceList = e.source.droppableId,
+                    targetList = e.destination.droppableId,
+                    sourceIndex = e.source.index,
+                    targetIndex = e.destination.index;
+
+                let temp = listsContent[sourceList].nailIDs[sourceIndex];
+                listsContent[sourceList].nailIDs.splice(sourceIndex, 1);
+
+                if (!listsContent[targetList].nailIDs)
+                    listsContent[targetList].nailIDs = [];
+                listsContent[targetList].nailIDs.splice(targetIndex, 0, temp);
+
+                // console.log(listsContent);
+
+                setBradorData({ ...bradorData, lists: listsContent })
+            }
+        } catch (err) {
+            //Catching errors when the elements are dragged but not moved
+            //Do Nothing...
+            console.log(err)
+        }
+    }
+    const addList = () => {
+        if (newListTitle) {
+            const newListID = `list-${Object.keys(bradorData.lists).length + 1}`;
+            let lists = bradorData.lists;
+            const emptyList = {
+                id: newListID,
+                title: newListTitle,
+                nailIDs: [],
+            }
+            lists[newListID] = emptyList;
+
+            let listorder = bradorData.listorder;
+            listorder.push(newListID);
+
+            setBradorData({ ...bradorData, lists: lists, listorder: listorder });
+            setNewListTitle("");
+        }
+    }
     React.useEffect(() => {
+        //Load list
         auth.onAuthStateChanged(firebaseUser => {
             if (firebaseUser) {
-                console.log(props.match.params.index);
                 database
                     .child(firebaseUser.uid)
                     .child("my_bradors")
@@ -59,6 +98,10 @@ function Brador(props) {
                     .once("value")
                     .then(snap => {
                         setBradorTitle(snap.val().title)
+                        // setBradorData({ nails: snap.val().brador.nails, lists: snap.val().brador.lists, listorder: snap.val().brador.listorder })
+                        const bradorDataTemp = snap.val().brador;
+                        setBradorData(bradorDataTemp);
+                        setIsLoading(false);
                     })
                 setUserAuthData({ uid: firebaseUser.uid, stageName: firebaseUser.displayName, photoURL: firebaseUser.photoURL });
             } else {
@@ -69,7 +112,6 @@ function Brador(props) {
 
     React.useEffect(() => {
         try {
-            console.log(userAuthData.uid, props.match.params.id);
             database
                 .child(userAuthData.uid)
                 .child("my_bradors")
@@ -81,8 +123,34 @@ function Brador(props) {
         }
     }, [bradorTitle]);
 
+    React.useEffect(() => {
+        // console.log("Brador Data has changed...", bradorData);
+        try {
+            if (bradorData.nails && bradorData.lists) {
+                database
+                    .child(userAuthData.uid)
+                    .child("my_bradors")
+                    .child(props.match.params.index)
+                    .child("brador")
+                    .set(bradorData);
+                database
+                    .child(userAuthData.uid)
+                    .child("my_bradors")
+                    .child(props.match.params.index)
+                    .child("lastUpdated")
+                    .set(currentDate());
+            }
+        }
+        catch (err) {
+            //Do Nothing
+        }
+    }, [bradorData]);
+
     return (
         <div style={styles.bradorPage}>
+            <Backdrop style={styles.backdrop} open={isLoading}>
+                <CircularProgress color="inherit" />
+            </Backdrop>
             <div style={styles.header}>
                 <Link to="/" style={styles.brandingName}>Brädor</Link>
                 <input
@@ -95,7 +163,10 @@ function Brador(props) {
                 <Avatar alt={userAuthData.stageName} src={userAuthData.photoURL} style={styles.photoURL} />
             </div>
             <div style={styles.body}>
-                <DragDropContext>
+                <DragDropContext
+                    onDragStart={onDragStart}
+                    onDragEnd={onDragEnd}
+                >
                     <Droppable droppableId={"lists"} direction="horizontal" type="list">
                         {
                             provided => (
@@ -106,10 +177,16 @@ function Brador(props) {
                                 >
                                     {
                                         bradorData.listorder.map((listID, index) => (
-                                            <List bradorData={bradorData} listID={listID} index={index} />
+                                            <List key={listID} bradorData={bradorData} listID={listID} index={index} setBradorData={setBradorData} />
                                         ))
                                     }
                                     {provided.placeholder}
+                                    <div style={{ ...styles.list, ...styles.listHead }}>
+                                        <input type="text" placeholder="New brädor list" style={styles.newNailTitle} value={newListTitle} onChange={(e) => { setNewListTitle(e.target.value) }} />
+                                        <IconButton onClick={addList}>
+                                            <AddRounded />
+                                        </IconButton>
+                                    </div>
                                 </div>
                             )
                         }
